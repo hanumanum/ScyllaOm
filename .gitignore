@@ -1,0 +1,10 @@
+.idea
+.serverless/
+package-lock.json
+node_modules
+launch.json
+testing/*/
+tests.js
+tmp/*
+src/db.postgress/*
+src/migrators/*
