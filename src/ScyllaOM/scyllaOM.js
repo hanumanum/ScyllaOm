@@ -17,7 +17,7 @@ const { cqlCreateTableFromSchema,
 } = require("./lib/cql.utils")
 const cassandra = require('cassandra-driver');
 const scyllaConfig = require('./scylla.config')
-const KEYSPACE = 'powerdmarc';
+const KEYSPACE = 'testkeyspace';
 
 const ConsistenciesENUM = cassandra.types.consistencies
 
