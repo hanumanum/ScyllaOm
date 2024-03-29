@@ -1,24 +1,23 @@
 /**
- * Checks if the given schema is valid.
- * TODO: Implement the actual validation logic.
- *
- * @param {Object} schema The schema object to validate.
- * @returns {boolean} Always returns true. Implement actual logic for validation.
+ * Extracts a specific field's value from a row object.
+ * @param {string} field_name The name of the field to extract.
+ * @returns {Function} A function that takes a row object and returns the value of the specified field.
  */
-const isSchemaValid = (schema) => {
-    return true
-}
+const propVal = (field_name) => (row) => row[field_name];
 
 /**
- * Compares two objects for equality by their JSON string representation.
- *
- * @param {Object} obj1 The first object to compare.
- * @param {Object} obj2 The second object to compare.
- * @returns {boolean} True if the objects are the same, false otherwise.
+ * Negates a function.
+ * 
  */
-const compareObjects = (obj1, obj2) => {
-    return JSON.stringify(obj1) === JSON.stringify(obj2)
-}
+const not = (fn) => (val) => !fn(val)
+
+/**
+ * 
+ * @param  {...any} fns 
+ * @returns function
+ */
+const fnCompose = (...fns) => (val) => fns.reduce((acc, fn) => fn(acc), val);
+
 
 /**
  * Creates a deep clone of an object or array, handling circular references.
@@ -38,32 +37,6 @@ const deepClone = (obj, hash = new WeakMap()) => {
     return result;
 }
 
-/**
- * Recursively checks if two objects or arrays are equal.
- *
- * @param {Object|Array} obj1 The first object or array to compare.
- * @param {Object|Array} obj2 The second object or array to compare.
- * @returns {boolean} True if objects or arrays are deeply equal, false otherwise.
- */
-const isDeepEqual = (obj1, obj2) => {
-    if (obj1 === obj2) {
-        return true;
-    }
-    if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
-        return false;
-    }
-    const keys1 = Object.keys(obj1);
-    const keys2 = Object.keys(obj2);
-    if (keys1.length !== keys2.length) {
-        return false;
-    }
-    for (let key of keys1) {
-        if (!keys2.includes(key) || !isDeepEqual(obj1[key], obj2[key])) {
-            return false;
-        }
-    }
-    return true;
-}
 
 /**
  * Generates a random string of a specified length.
@@ -95,7 +68,7 @@ const withTimeLog = async (fn, title) => {
  * @param {number} size The size of each chunk.
  * @returns {Array} An array of chunks.
  */
-const chunkify = (arr, size) => {
+const chunkifyArray = (arr, size) => {
     return arr.reduce((acc, _, i) => {
         if (i % size === 0) {
             acc.push(arr.slice(i, i + size))
@@ -103,6 +76,39 @@ const chunkify = (arr, size) => {
         return acc
     }, [])
 }
+
+
+/**
+ * @param {number} start 
+ * @param {number} end
+ * @returns {Array} array of integers 
+ */
+const getIntRange = (start, end) => {
+    const range = [];
+    for (let i = start; i < end; i++) {
+        range.push(i)
+    }
+    return range;
+}
+
+/** 
+ * 
+ * @param {number} start
+ * @param {number} end
+ * @param {number} chankSize
+ * @returns {Array} array of objects with rangeStart and rangeEnd properties
+ */
+const chunkifyRange = (start, end, chankSize) => {
+    const chanks = [];
+    for (let i = start; i < end; i += chankSize) {
+        chanks.push({
+            rangeStart: i,
+            rangeEnd: Math.min(i + chankSize, end)
+        });
+    }
+    return chanks;
+}
+
 
 /**
  * Checks if the given value is a plain object (i.e., not an array, date, null, etc.).
@@ -114,13 +120,34 @@ const isPlainObject = (obj) => {
     return typeof obj === 'object' && obj !== null && !Array.isArray(obj) && !(obj instanceof Date);
 }
 
+const objectToArray = (obj) => Object.keys(obj).map(key => obj[key])
+
+const arrayToKey = (value) => {
+    if (Array.isArray(value)) {
+        const strArr = value.sort().join('::')
+        if (strArr !== '') {
+            return strArr;
+        }
+        else {
+            return value
+                .map((_) => '_')
+                .join('::')
+        }
+    }
+    return value
+}
+
 
 module.exports = {
-    isSchemaValid,
+    objectToArray,
     deepClone,
-    compareObjects,
-    isDeepEqual,
     withTimeLog,
-    chunkify,
-    isPlainObject
+    chunkifyArray,
+    chunkifyRange,
+    isPlainObject,
+    propVal,
+    not,
+    getIntRange,
+    fnCompose,
+    arrayToKey
 }

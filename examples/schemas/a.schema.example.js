@@ -39,4 +39,4 @@ const SchemaExample = {
     }
 }
 
-module.exports = { SchemaExample }
+module.exports = SchemaExample
