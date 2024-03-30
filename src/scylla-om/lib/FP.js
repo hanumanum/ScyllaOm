@@ -121,6 +121,11 @@ const isPlainObject = (obj) => {
 }
 
 const objectToArray = (obj) => Object.keys(obj).map(key => obj[key])
+const flatArrayWithObjName = (obj) => Object.keys(obj).map((key) => { 
+    const ob = obj[key]
+    ob.propName = key
+    return ob; 
+})
 
 const arrayToKey = (value) => {
     if (Array.isArray(value)) {
@@ -139,6 +144,7 @@ const arrayToKey = (value) => {
 
 
 module.exports = {
+    flatArrayWithObjName,
     objectToArray,
     deepClone,
     withTimeLog,

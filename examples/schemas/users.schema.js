@@ -24,7 +24,7 @@ const UsersExample = {
         updated_at: {
             type: "TIMESTAMP",
             field: "updated_at"
-        }
+        },
     },
     primaryKey: {
         partitionKeys: ['user_id'],
