@@ -18,9 +18,8 @@ const PostsExample = {
             field: "content"
         },
         tags: {
-            type: "LIST<TEXT>",
+            type: "FROZEN<LIST<TEXT>>",
             field: "tags",
-            frozen: true
         },
         category_id:{
             type: "INT",
@@ -38,7 +37,7 @@ const PostsExample = {
     primaryKey: {
         partitionKeys: ['user_id'],
         orderingKeys: ['post_id'],
-        orderingKeyOrders: ['ASC', 'DESC'] //TODO: currenty not implemented, think about this
+        orderingKeyOrders: ['ASC']
     }
 }
 

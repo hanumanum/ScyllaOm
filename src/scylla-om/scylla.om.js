@@ -5,7 +5,7 @@ const cassandra = require('cassandra-driver');
 const { ConsistenciesENUM, WithDropTableENUM } = require("./lib/enums");
 
 const { rawQuery, streamQuery } = require("./lib/raw.query");
-const { createTables } = require("./lib/sync.tables");
+const { syncSchema, copyFTTT } = require("./lib/sync.tables");
 const { upsertOne, deleteByPK, findOneByPK, bulkUpsert } = require("./lib/methods");
 
 const ScyllaOM = async (scyllaConfig) => {
@@ -42,14 +42,15 @@ const ScyllaOM = async (scyllaConfig) => {
             deleteByPK: deleteByPK(schema)(client),
             findOneByPK: findOneByPK(schema)(client),
             bulkUpsert: bulkUpsert(schema)(client),
+            syncSchema: syncSchema(scyllaConfig.keyspace, schema)(client)
         }
     }
 
     return {
         setSchema,
-        createTables: createTables(client),
         rawQuery: rawQuery(client),
-        streamQuery: streamQuery(client)
+        streamQuery: streamQuery(client),
+        copyFTTT: copyFTTT(client)
     }
 }
 

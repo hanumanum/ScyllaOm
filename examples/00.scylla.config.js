@@ -18,7 +18,7 @@ const scyllaConfig = {
         },
         maxRequestsPerConnection: 32768
     },
-    keyspace: 'powerdmarc_scylla_test',
+    keyspace: 'scylla_test',
 }
 
 module.exports = scyllaConfig

@@ -1,3 +1,14 @@
+
+const cqlTableInfo = (keyspace, tableName) => {
+    const query = `SELECT JSON column_name, clustering_order, kind, type  
+                 FROM system_schema.columns 
+                 WHERE keyspace_name = ? AND table_name = ?`;
+    return {
+        query,
+        params: [keyspace, tableName]
+    }
+}
+
 const cqlDropTableBySchema = (schema) => {
     const dropCQL = `DROP TABLE IF EXISTS ${schema.tableName};`
     return {
@@ -7,20 +18,23 @@ const cqlDropTableBySchema = (schema) => {
 }
 
 const cqlCreateTableFromSchema = (schema) => {
-    const composeKeysWitTypes = (key) => {
-        if (schema.fields[key].frozen) {
-            return `${key} FROZEN<${schema.fields[key].type}>`
-        }
-        else {
-            return `${key} ${schema.fields[key].type}`
-        }
-    }
+    const composeKeysWitTypes = (key) => `${key} ${schema.fields[key].type}`
+
+    let clusteringOrder = (schema.primaryKey.orderingKeys)
+        ? schema.primaryKey.orderingKeys.map((key, index) => `${key} ${schema.primaryKey.orderingKeyOrders[index]}`).join(', ') 
+        : ''
+
+    clusteringOrder = (clusteringOrder) ? ` WITH CLUSTERING ORDER BY (${clusteringOrder})` : ''
 
     const keysWithTypes = Object
         .keys(schema.fields)
         .map(composeKeysWitTypes)
         .join(', ')
-    const createCQL = `CREATE TABLE ${schema.tableName} (${keysWithTypes}, PRIMARY KEY((${schema.primaryKey.partitionKeys.join(', ')}), ${schema.primaryKey.orderingKeys.join(', ')}));`
+    
+    
+    const createCQL = `CREATE TABLE ${schema.tableName} (${keysWithTypes}, 
+                        PRIMARY KEY((${schema.primaryKey.partitionKeys.join(', ')}), ${schema.primaryKey.orderingKeys.join(', ')}))
+                        ${clusteringOrder} ;`
 
     return {
         query: createCQL,
@@ -77,5 +91,6 @@ module.exports = {
     cqlDropTableBySchema,
     cqlForDeleteOne,
     cqlForSelectOne,
-    cqlForUpsert
+    cqlForUpsert,
+    cqlTableInfo
 }

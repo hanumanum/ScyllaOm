@@ -10,9 +10,8 @@ const UsersExample = {
             field: "name"
         },
         nick_names: {
-            type: "LIST<TEXT>",
+            type: "FROZEN<LIST<TEXT>>",
             field: "nick_names",
-            frozen: true
         },
         category_id:{
             type: "INT",
@@ -30,7 +29,7 @@ const UsersExample = {
     primaryKey: {
         partitionKeys: ['user_id'],
         orderingKeys: ['name','category_id'],
-        orderingKeyOrders: ['ASC', 'DESC'] //TODO: currenty not implemented, think about this
+        orderingKeyOrders: ['ASC', 'DESC']
     }
 }
 

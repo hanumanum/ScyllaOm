@@ -1,4 +1,4 @@
-const { propVal, objectToArray } = require("./FP.js")
+const { propVal, objectToArray, deepClone } = require("./FP.js")
 
 
 /**
@@ -43,9 +43,20 @@ const checkFieldOverSchema = (schema, checkFor) => (property, number) => {
     
 }
 
+const removeFieldsNotInScheme = (schema) => (data) => {
+    const newData = deepClone(data);
+    for(const key in newData){
+        if(!schema.fields[key]){
+            delete newData[key];
+        }
+    }
+    return newData;
+}
+
 module.exports = {
     isSchemaValid,
     isSchameOwnsField,
     hasAllPKFields,
-    checkFieldOverSchema
+    checkFieldOverSchema,
+    removeFieldsNotInScheme
 }
