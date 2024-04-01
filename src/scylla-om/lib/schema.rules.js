@@ -9,6 +9,7 @@ const simpleTypes = [
     , 'BOOLEAN',
     , 'DOUBLE'
     , 'UUID'
+    , 'INET'
 ]
 
 const collectionTypes = [
