@@ -10,6 +10,7 @@ const quotify = (value) => {
 }
 
 const ScyllaOmQueryBuilder = () => {
+    throw new Error("Not implemented")
     let _schema = null
     let _primaryKeys = null
     let _table = null
