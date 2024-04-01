@@ -1,5 +1,5 @@
 {
-  "name": "javascript",
+  "name": "scylla.om",
   "version": "1.0.0",
   "description": "",
   "main": "src/scylla-om/scylla.om.js",
