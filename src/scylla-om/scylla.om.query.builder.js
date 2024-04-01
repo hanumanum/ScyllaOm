@@ -132,4 +132,4 @@ const ScyllaOmQueryBuilder = () => {
 }
 
 
-module.exports = { QueryBuilder: ScyllaOmQueryBuilder }
+module.exports = { ScyllaOmQueryBuilder }
