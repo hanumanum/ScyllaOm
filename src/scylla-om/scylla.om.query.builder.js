@@ -1,6 +1,6 @@
 const { propVal } = require("./lib/FP")
 const { ConsistenciesENUM } = require("./scylla.om")
-const { isSchemaValid, checkFieldOverSchema } = require("./lib/schema.utils")
+const { isSchemaValid, checkFieldOverSchema } = require("./lib/schema")
 
 const quotify = (value) => {
     if (typeof value === 'string') {

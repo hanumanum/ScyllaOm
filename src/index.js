@@ -1,9 +1,10 @@
 const { ScyllaOmQueryBuilder } = require("./scylla-om/scylla.om.query.builder");
-const { ScyllaOM, ConsistenciesENUM, WithDropTableENUM } = require("./scylla-om/scylla.om.js");
+const { ScyllaOM } = require("./scylla-om/scylla.om.js");
+const { ConsistenciesENUM, WithDropTableENUM } = require("./scylla-om/lib/enums");
 
 module.exports = {
     ScyllaOM,
     ScyllaOmQueryBuilder,
     ConsistenciesENUM,
-    WithDropTableENUM    
+    WithDropTableENUM
 }

@@ -1,4 +1,5 @@
-const { ScyllaOM, ConsistenciesENUM } = require("../src/scylla-om/scylla.om.js");
+
+const { ScyllaOM, ConsistenciesENUM } = require('../src/');
 const scyllaConfig = require('./00.scylla.config.js');
 const Schemas = require('./schemas/index.js');
 
@@ -6,6 +7,7 @@ const Schemas = require('./schemas/index.js');
 const userPK = {
     user_id: 1,
     name: 'test-user',
+    category_id: 1
 }
 
 const user = {
