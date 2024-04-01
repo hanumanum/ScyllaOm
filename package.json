@@ -2,7 +2,7 @@
   "name": "javascript",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src/scylla-om/scylla.om.js",
   "scripts": {
     "dev": "node src/index.js"
   },
