@@ -5,7 +5,10 @@ const simpleTypes = [
     'BIGINT'
     , 'INT'
     , 'TEXT'
-    , 'TIMESTAMP'
+    , 'TIMESTAMP',
+    , 'BOOLEAN',
+    , 'DOUBLE'
+    , 'UUID'
 ]
 
 const collectionTypes = [
@@ -49,6 +52,7 @@ const isDataTypeSupported = (field_type) => {
 }
 
 const getSchemaRules = (schema) => [
+    //TODO: include table name in the error message
     [schema !== undefined, 'schema is undefined'],
     [schema.fields !== undefined, 'schema.fields is undefined'],
     [schema.tableName !== undefined, 'schema.tableName is undefined'],
