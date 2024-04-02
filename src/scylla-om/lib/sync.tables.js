@@ -53,8 +53,9 @@ const copyFTTT = (client) => async (fromTable, toTable, fnTransform) => {
     try {
         const copyRow = async (row) => {
             const rowValue = fnTransform(JSON.parse(row['[json]']))
-            await _rawQuery(`INSERT INTO ${toTable} JSON '${JSON.stringify(rowValue)}';`, [], ConsistenciesENUM.localQuorum)
-        }
+            const jsonTOInsert = JSON.stringify(rowValue)
+            await _rawQuery(`INSERT INTO ${toTable} JSON ?;`, [jsonTOInsert], ConsistenciesENUM.localQuorum)
+        } 
         const streamEnd = () => console.log(`copying from ${fromTable} to ${toTable} ended`);
 
         await _streamQuery(`SELECT JSON * FROM ${fromTable}`, [], ConsistenciesENUM.localQuorum, copyRow, streamEnd)
@@ -67,6 +68,7 @@ const copyFTTT = (client) => async (fromTable, toTable, fnTransform) => {
 const syncSchema = (keyspace, schema) => (client) => async () => {
     const _rawQuery = rawQuery(client)
     const _copyFTTT = copyFTTT(client)
+
 
     const tableInfo = cqlTableInfo(keyspace, schema.tableName)
     const DBTableColumns = await _rawQuery(tableInfo.query, tableInfo.params, ConsistenciesENUM.all)
@@ -82,15 +84,17 @@ const syncSchema = (keyspace, schema) => (client) => async () => {
             return
         }
 
-        const tmpTableName = `${keyspace}.${schema.tableName}_tmp_migration_${Date.now()}`;
+        const tmpTableName = `${keyspace}.${schema.tableName}_tmp_${Date.now()}`;
         const schemaTableName = `${keyspace}.${schema.tableName}`
 
         const TableDefinition = await _rawQuery(`describe table ${schema.tableName};`, [], ConsistenciesENUM.localQuorum)
+        
         const TableDefinitionCQLOld = TableDefinition.rows[0].create_statement;
         const TableDefinitionCQLTMP = TableDefinitionCQLOld.replace(`CREATE TABLE ${schemaTableName}`, `CREATE TABLE ${tmpTableName}`);
 
         await _rawQuery(TableDefinitionCQLTMP, [], ConsistenciesENUM.localQuorum)
 
+        
         await _copyFTTT(schemaTableName, tmpTableName, (val) => val)
 
         await _rawQuery(`DROP TABLE ${schemaTableName};`, [], ConsistenciesENUM.localQuorum)
