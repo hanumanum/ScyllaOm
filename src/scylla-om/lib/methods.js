@@ -69,6 +69,7 @@ const bulkUpsert = (schema) => (client) => async (dataArray, chunkSize, consiste
             return
         }
 
+        //TODO: chunkify here, to prevent memory overflows
         const queryWithParams = dataArray
             .map(instantate(schema))
             .map(cqlForUpsert)

@@ -94,7 +94,6 @@ const syncSchema = (keyspace, schema) => (client) => async () => {
 
         await _rawQuery(TableDefinitionCQLTMP, [], ConsistenciesENUM.localQuorum)
 
-        
         await _copyFTTT(schemaTableName, tmpTableName, (val) => val)
 
         await _rawQuery(`DROP TABLE ${schemaTableName};`, [], ConsistenciesENUM.localQuorum)

@@ -14,12 +14,16 @@ const UsersExample = {
             field: "title"
         },
         nick_names: {
-            type: "FROZEN<LIST<TEXT>>",
+            type: "LIST<TEXT>",
             field: "nick_names",
         },
         birth_year: {
             type: "INT",
             field: "birth_year",
+        },
+        salary:{
+            type: "DOUBLE",
+            field: "salary",
         },
         category_id:{
             type: "INT",
@@ -36,8 +40,8 @@ const UsersExample = {
     },
     primaryKey: {
         partitionKeys: ['user_id'],
-        orderingKeys: ['name','category_id','title'],
-        orderingKeyOrders: ['ASC', 'DESC', 'asc']
+        orderingKeys: ['name','category_id','title','birth_year'],
+        orderingKeyOrders: ['ASC', 'DESC', 'ASC', 'DESC']
     }
 }
 
