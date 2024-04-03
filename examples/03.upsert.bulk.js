@@ -20,7 +20,7 @@ const users = Array(100000).fill(0).map((_, i) => ({
     name: `bulk-user${i}`,
     title: titles[i % 5],
     birth_year: 1990 + i % 10,
-    salary: 1000 * i % 10,
+    salary: 1000 * (i % 10),
     nick_names: [getRanomString(5), getRanomString(5)],
     category_id: i % 10,
     created_at: new Date(),

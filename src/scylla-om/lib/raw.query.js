@@ -51,8 +51,8 @@ const streamQuery = (client) => async (query, params, consistency, doOnRow, doOn
         })
 
         stream.on('end', async () => {
-            await doOnEnd()
-            return resolve()
+            const val = await doOnEnd()
+            return resolve(val)
         })
 
         stream.on('error', async (err) => {
