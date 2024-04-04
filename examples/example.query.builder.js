@@ -13,14 +13,9 @@ const main = async () => {
             , RRFields.salary
         )
         .whereIn(RRFields.user_id, [46073, 89864, 23958, 48024, 88647, 13946, 79369, 25453, 44894, 67647, 89997])
-        .whereIn(RRFields.name, ['bulk-user25453',
-            'bulk-user44894',
-            'bulk-user46073',
-            'bulk-user48024',
-            'bulk-user67647',
-            'bulk-user79369'])
-        .whereIn(RRFields.salary, [3000, 4000, 7000, 9000])
-        .whereIn(RRFields.birth_year, [1993, 1994, 1997])
+        .whereIn(RRFields.name, ['bulk-user9', 'bulk-user0', 'bulk-user10'])
+        .whereIn(RRFields.salary, [3000, 4000, 6000, 8000, 9000])
+        .whereIn(RRFields.birth_year, [1996, 1998, 1993])
         .printQuery()
         .run()
 

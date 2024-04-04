@@ -1,4 +1,5 @@
 const { isPlainObject, deepClone, arrayToKey } = require("./FP");
+const { getPrimaryKeys } = require("./schema");
 
 const instantate = (schema) => (data) => {
   if (!isPlainObject(data)) {
@@ -6,7 +7,7 @@ const instantate = (schema) => (data) => {
     throw new Error(`${schema.tableName} Cannot instantate, argument is not an object`);
   }
 
-  const primaryKeys = [...schema.primaryKey.partitionKeys, ...schema.primaryKey.orderingKeys]
+  const primaryKeys = getPrimaryKeys(schema)
   const findMissingKeys = (data) => primaryKeys.filter((key) => data[key] === undefined || data[key] === null)
   const keysFromSchema = (key) => (key in schema.fields)
 

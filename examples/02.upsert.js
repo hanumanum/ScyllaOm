@@ -7,7 +7,9 @@ const Schemas = require('./schemas/index.js');
 const userPK = {
     user_id: 1,
     name: 'test-user',
-    category_id: 1
+    category_id: 1,
+    title: 'test-user-title',
+    birth_year: 1000
 }
 
 const user = {

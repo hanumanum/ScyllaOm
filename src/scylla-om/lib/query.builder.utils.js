@@ -6,8 +6,6 @@ const quotify = (value) => {
 }
 
 const predicateFilter = (predicatesFilter, row) => {
-    //console.log(predicatesFilter)
-    
     for (let pf of predicatesFilter) {
         const keyName = Object.keys(pf)[0]
         if (!pf[keyName].includes(row[keyName])) {

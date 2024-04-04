@@ -23,7 +23,7 @@ const isSchameOwnsField = (schema) => (field) => {
 }
 
 const hasAllPKFields = (schema) => (data) => {
-    const primaryKeys = [...schema.primaryKey.partitionKeys, ...schema.primaryKey.orderingKeys];
+    const primaryKeys = getPrimaryKeys(schema);
     return primaryKeys.every((key) => data[key] !== undefined);
 }
 
