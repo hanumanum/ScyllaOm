@@ -77,10 +77,12 @@ const syncSchema = (keyspace, schema) => (client) => async () => {
     try {
         if (DBTableColumns.rows.length === 0) {
             await _rawQuery(createTableCQL.query, createTableCQL.params, ConsistenciesENUM.localQuorum)
+            console.info(`Table ${schema.tableName} has been created`);
             return;
         }
 
         if (!areDefinitionsDifferent(DBTableColumns, schema)) {
+            console.info(`No difference between schema and ${schema.tableName} `);
             return
         }
 

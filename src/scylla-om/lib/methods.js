@@ -78,7 +78,6 @@ const bulkUpsert = (schema) => (client) => async (dataArray, chunkSize, consiste
                 .map(cqlForUpsert)
 
             await bulkExecute(client)(queryWithParams, parrallelChunkSize, consistency)
-            console.info(`chunk upserted`)
         }
     }
     catch (err) {

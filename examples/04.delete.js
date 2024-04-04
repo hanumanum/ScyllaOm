@@ -7,6 +7,8 @@ const userPK = {
     user_id: 1,
     name: 'test-user',
     category_id: 1,
+    title: 'test-user-title',
+    birth_year: 2012
 }
 
 const user = {
@@ -29,11 +31,6 @@ const main = async () => {
 
     await Users
         .deleteByPK(userPK, ConsistenciesENUM.localQuorum)
-
-    //Will be same result as above
-    /* await Users
-        .deleteByPK(userFound1, ConsistenciesENUM.localQuorum)
-    */
 
     const userFound2 = await Users
         .findOneByPK(userPK, ConsistenciesENUM.localQuorum)

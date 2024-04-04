@@ -1,6 +1,7 @@
 const { propVal, objectToArray, deepClone } = require("./FP.js")
 const SchemaRules = require("./schema.rules.js")
 
+const getPrimaryKeys = (schema) => [...schema.primaryKey.partitionKeys, ...schema.primaryKey.orderingKeys]
 
 const isSchemaValid = (schema) => {
     
@@ -22,7 +23,7 @@ const isSchameOwnsField = (schema) => (field) => {
 }
 
 const hasAllPKFields = (schema) => (data) => {
-    const primaryKeys = [...schema.primaryKey.partitionKeys, ...schema.primaryKey.orderingKeys];
+    const primaryKeys = getPrimaryKeys(schema);
     return primaryKeys.every((key) => data[key] !== undefined);
 }
 
@@ -54,5 +55,6 @@ module.exports = {
     isSchameOwnsField,
     hasAllPKFields,
     checkFieldOverSchema,
-    removeFieldsNotInScheme
+    removeFieldsNotInScheme,
+    getPrimaryKeys
 }

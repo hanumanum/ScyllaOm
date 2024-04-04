@@ -25,6 +25,10 @@ const UsersExample = {
             type: "DOUBLE",
             field: "salary",
         },
+        pets_number:{
+            type: "INT",
+            field: "pets_number",
+        },
         category_id:{
             type: "INT",
             field: "category_id",

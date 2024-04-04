@@ -15,7 +15,7 @@ const getRanomString = (length) => {
 
 const titles = ['baba', 'maga', 'dada', 'sabada', 'gamada']
 
-const users = Array(1_000_000).fill(0).map((_, i) => ({
+const users = Array(10_000).fill(0).map((_, i) => ({
     user_id: i,
     name: `bulk-user${i % 11}`,
     title: titles[i % 5],
