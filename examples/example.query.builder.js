@@ -24,7 +24,7 @@ const main = async () => {
         .printQuery()
         .run()
 
-        console.table(result)
+    console.table(result)
 }
 
 main()

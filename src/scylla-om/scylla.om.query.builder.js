@@ -1,4 +1,3 @@
-const { propVal } = require("./lib/FP")
 const { ConsistenciesENUM } = require("./scylla.om")
 const { isSchemaValid, checkFieldOverSchema } = require("./lib/schema")
 const { ScyllaOM } = require('./scylla.om');
@@ -18,6 +17,38 @@ const predicateFilter = (predicatesFilter, row) => {
         }
     }
     return true
+}
+
+const streamFilter = (predicatesFilter) => {
+    const filtered = []
+    const collect = (value) => {
+        const row = JSON.parse(value['[json]'])
+
+        if (predicateFilter(predicatesFilter, row)) {
+            filtered.push(row)
+        }
+    }
+
+    const result = () => {
+        return filtered
+    }
+    return {
+        collect,
+        result
+    }
+}
+
+const projectionFilter = (projections) => {
+    const _proj = projections.map(p => p.field)
+    return (row) => {
+        return _proj.reduce((acc, field) => {
+            return {
+                ...acc,
+                [field]: row[field]
+            }
+
+        }, {})
+    }
 }
 
 const ScyllaOmQueryBuilder = async (scyllaConfig) => {
@@ -111,10 +142,8 @@ const ScyllaOmQueryBuilder = async (scyllaConfig) => {
                      FROM ${_table}
                      WHERE ${where.join(" AND ")}`
 
-
         queries.push(cql)
         return queries;
-
     }
 
     const printQuery = () => {
@@ -144,29 +173,10 @@ const ScyllaOmQueryBuilder = async (scyllaConfig) => {
         const [_, predicatesFilter] = groupPredicates(_primaryKeys, _predicates)
         console.log(predicatesFilter)
 
-        const filterer = (predicatesFilter) => {
-            const filtered = []
-            const collect = (value) => {
-                const row = JSON.parse(value['[json]'])
-
-                if (predicateFilter(predicatesFilter, row)) {
-                    filtered.push(row)
-                }
-            }
-
-            const result = () => {
-                return filtered
-            }
-            return {
-                collect,
-                result
-            }
-
-        }
-
-        const filter = filterer(predicatesFilter)
+        const onlyRequestedProjections = projectionFilter(_projections)
+        const filter = streamFilter(predicatesFilter)
         const data = await scyllOm.streamQuery(_queries[0], [], _consistency, filter.collect, filter.result)
-        return data;
+        return data.map(onlyRequestedProjections)
 
     }
 
