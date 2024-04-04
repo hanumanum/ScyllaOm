@@ -6,10 +6,12 @@ const main = async () => {
 
     try {
         const scyllaOm = await ScyllaOM(scyllaConfig);
-        await scyllaOm
-            .setSchema(Schemas.UsersExample)
-            .syncSchema()
-        console.log('tables synced')
+
+        const Users = scyllaOm.setSchema(Schemas.UsersExample)
+        await Users.syncSchema()
+
+        const Posts = scyllaOm.setSchema(Schemas.PostsExample)
+        await Posts.syncSchema()
     }
     catch (err) {
         console.log(err)

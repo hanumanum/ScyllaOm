@@ -1,3 +1,4 @@
+const { chunkifyArray } = require("./FP");
 const { cqlForUpsert, cqlForSelectOne, cqlForDeleteOne } = require("./cql");
 const { instantate } = require("./instance");
 const { rawQuery, bulkExecute } = require("./raw.query");
@@ -44,9 +45,9 @@ const deleteByPK = (schema) => (client) => async (data, consistency) => {
 
 const upsertOne = (schema) => (client) => async (data, consistency) => {
     try {
-        
+
         checkBasicInboundArguments("upsertOne", schema, data, consistency)
-        
+
         const instance = instantate(schema)(data)
         const cqlUpsert = cqlForUpsert(instance)
         await rawQuery(client)(cqlUpsert.query, cqlUpsert.params, consistency)
@@ -60,7 +61,7 @@ const bulkUpsert = (schema) => (client) => async (dataArray, chunkSize, consiste
     try {
 
         checkBasicInboundArguments("bulkUpsert", schema, dataArray, consistency)
-        
+
         if (!chunkSize) {
             throw new Error("Upsert chunkSize is not set")
         }
@@ -69,12 +70,16 @@ const bulkUpsert = (schema) => (client) => async (dataArray, chunkSize, consiste
             return
         }
 
-        //TODO: chunkify here, to prevent memory overflows
-        const queryWithParams = dataArray
-            .map(instantate(schema))
-            .map(cqlForUpsert)
+        const parrallelChunkSize = 100
+        const dataArrayChunks = chunkifyArray(dataArray, chunkSize)
+        while (arrChunk = dataArrayChunks.shift()) {
+            const queryWithParams = arrChunk
+                .map(instantate(schema))
+                .map(cqlForUpsert)
 
-        await bulkExecute(client)(queryWithParams, chunkSize, consistency)
+            await bulkExecute(client)(queryWithParams, parrallelChunkSize, consistency)
+            console.info(`chunk upserted`)
+        }
     }
     catch (err) {
         throw err;
