@@ -102,6 +102,8 @@ const syncSchema = (keyspace, schema) => (client) => async () => {
 
         await _copyFTTT(tmpTableName, schemaTableName, removeFieldsNotInScheme(schema))
 
+        console.info(`Table ${schema.tableName} has been synced`);
+
     }
     catch (err) {
         console.error(err)

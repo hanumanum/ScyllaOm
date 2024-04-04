@@ -33,7 +33,6 @@ const ScyllaOM = async (scyllaConfig) => {
 
     const setSchema = (schema) => {
         if (!isSchemaValid(schema)) {
-            //TODO: make error message more informative, that is invalid ?
             throw new Error("Invalid schema")
         }
 
